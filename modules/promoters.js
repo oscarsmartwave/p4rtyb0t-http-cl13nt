@@ -98,9 +98,34 @@ function getPromoterByCode(params, callback) {
 	});
 }
 
+function deletePromoter(params, callback) {
+ var deleteUrl = URL +"/" +params.organisationId + "/promoters/"+ params.promoterId;
+ var options = {
+  method: 'delete',
+  json: true,
+  url: deleteUrl
+ }
+
+ request(options, function (error, response, body) {
+  if(!error && response.statusCode == constants.SUCCESS) {
+   var mapResponse = new MapResponse(body);
+   var newBody = mapResponse.mapData();
+
+   callback(null, response, newBody);
+  } else {
+   var mapResponse = new MapResponse(body);
+   var newBody = mapResponse.mapData();
+
+   callback(newBody, response, null);
+  }
+ });
+
+}
+
 module.exports = {
 	getPromoters: getPromoters,
 	create: create,
+	deletePromoter: deletePromoter, 
 	updatePromoter: updatePromoter,
 	getPromoterByCode: getPromoterByCode
 }
